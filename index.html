@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dual View</title>
+<title>Quad View</title>
 <style>
   :root {
     --bg: #14171c;
@@ -12,41 +12,66 @@
     --text: #e8ebf0;
     --muted: #8d97a6;
     --accent: #3b82f6;
+    --gold: #f5c542;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body {
+    display: flex;
+    flex-direction: column;
     background: var(--bg);
     color: var(--text);
     font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-    display: flex;
   }
-  .split {
+  .header {
     display: flex;
-    width: 100%;
-    height: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--bar);
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  .name {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .crown {
+    font-size: 22px;
+    line-height: 1;
+    filter: drop-shadow(0 0 6px rgba(245, 197, 66, 0.5));
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     gap: 2px;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
     background: var(--line);
   }
+  .grid.focus { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+  .grid.focus .pane:not(.active) { display: none; }
   .pane {
-    flex: 1 1 0;
-    min-width: 0;
-    min-height: 0;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    min-height: 0;
     background: var(--bg);
   }
   .bar {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
+    gap: 6px;
+    padding: 6px 10px;
     background: var(--bar);
     border-bottom: 1px solid var(--line);
     flex-shrink: 0;
   }
-  .title { font-size: 14px; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .url { font-size: 11px; color: var(--muted); max-width: 38%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .title { font-size: 13px; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .btn {
     appearance: none;
     border: 1px solid var(--line);
@@ -54,7 +79,7 @@
     color: var(--text);
     font: inherit;
     font-size: 12px;
-    padding: 6px 10px;
+    padding: 5px 9px;
     border-radius: 6px;
     cursor: pointer;
     text-decoration: none;
@@ -62,73 +87,87 @@
   }
   .btn:hover { background: #262c35; }
   .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  iframe {
-    flex: 1;
-    width: 100%;
-    border: 0;
-    background: #fff;
-  }
-  .split.focus-a .pane:nth-child(2),
-  .split.focus-b .pane:nth-child(1) { display: none; }
+  iframe { flex: 1; width: 100%; border: 0; background: #fff; }
 
   @media (max-width: 800px) {
-    .split { flex-direction: column; }
-    .url { display: none; }
-    .btn { padding: 6px 8px; }
+    html, body { height: auto; }
+    .grid { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-rows: 80vh; flex: none; }
+    .grid.focus { grid-auto-rows: 100vh; }
   }
 </style>
 </head>
 <body>
 
-<main class="split" id="split">
+<header class="header">
+  <span class="name">Mahmoud Youssef</span>
+  <span class="crown" aria-hidden="true">👑</span>
+</header>
 
-  <section class="pane">
-    <div class="bar">
-      <span class="title">Link 1</span>
-      <span class="url">lltrco.com/?r=mahmoudyoussef20</span>
-      <button class="btn" data-reload="a">Reload</button>
-      <button class="btn" data-focus="a" id="fa">Expand</button>
-      <a class="btn" target="_blank" rel="noopener" href="https://lltrco.com/?r=mahmoudyoussef20">Open in new tab</a>
-    </div>
-    <iframe id="a" title="Link 1" src="https://lltrco.com/?r=mahmoudyoussef20" loading="eager" allow="fullscreen" referrerpolicy="no-referrer-when-downgrade"></iframe>
-  </section>
-
-  <section class="pane">
-    <div class="bar">
-      <span class="title">Link 2</span>
-      <span class="url">lltrco.com/?r=mahmoudyoussef2024</span>
-      <button class="btn" data-reload="b">Reload</button>
-      <button class="btn" data-focus="b" id="fb">Expand</button>
-      <a class="btn" target="_blank" rel="noopener" href="https://lltrco.com/?r=mahmoudyoussef2024">Open in new tab</a>
-    </div>
-    <iframe id="b" title="Link 2" src="https://lltrco.com/?r=mahmoudyoussef2024" loading="eager" allow="fullscreen" referrerpolicy="no-referrer-when-downgrade"></iframe>
-  </section>
-
-</main>
+<main class="grid" id="grid"></main>
 
 <script>
-  const split = document.getElementById('split');
+  // ===== LINKS =====
+  const LINKS = [
+    "https://lltrco.com/?r=mahmoudyoussef20",
+    "https://lltrco.com/?r=mahmoudyoussef2024",
+    "https://lltrco.com/?r=mmyy1",
+    "https://lltrco.com/?r=mmyy2"
+  ];
+  // =================
 
-  document.querySelectorAll('[data-reload]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      const f = document.getElementById(btn.dataset.reload);
-      f.src = f.src;
-    });
-  });
+  const grid = document.getElementById('grid');
 
-  document.querySelectorAll('[data-focus]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      const side = btn.dataset.focus;
-      const cls = 'focus-' + side;
-      const on = split.classList.contains(cls);
-      split.classList.remove('focus-a', 'focus-b');
-      document.getElementById('fa').textContent = 'Expand';
-      document.getElementById('fb').textContent = 'Expand';
-      if (!on) {
-        split.classList.add(cls);
-        btn.textContent = 'Collapse';
+  LINKS.forEach(function (url, i) {
+    const pane = document.createElement('section');
+    pane.className = 'pane';
+
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+
+    const title = document.createElement('span');
+    title.className = 'title';
+    title.textContent = 'Link ' + (i + 1);
+
+    const reload = document.createElement('button');
+    reload.className = 'btn';
+    reload.textContent = 'Reload';
+
+    const expand = document.createElement('button');
+    expand.className = 'btn';
+    expand.textContent = 'Expand';
+    expand.setAttribute('data-exp', '1');
+
+    const open = document.createElement('a');
+    open.className = 'btn';
+    open.textContent = 'Open in new tab';
+    open.href = url;
+    open.target = '_blank';
+    open.rel = 'noopener';
+
+    const frame = document.createElement('iframe');
+    frame.title = 'Link ' + (i + 1);
+    frame.src = url;
+    frame.allow = 'fullscreen';
+
+    reload.addEventListener('click', function () { frame.src = frame.src; });
+
+    expand.addEventListener('click', function () {
+      const isActive = pane.classList.contains('active');
+      document.querySelectorAll('.pane').forEach(function (p) {
+        p.classList.remove('active');
+        p.querySelector('[data-exp]').textContent = 'Expand';
+      });
+      grid.classList.remove('focus');
+      if (!isActive) {
+        pane.classList.add('active');
+        grid.classList.add('focus');
+        expand.textContent = 'Collapse';
       }
     });
+
+    bar.append(title, reload, expand, open);
+    pane.append(bar, frame);
+    grid.appendChild(pane);
   });
 </script>
 
