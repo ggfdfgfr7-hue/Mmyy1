@@ -1,174 +1,255 @@
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Quad View</title>
-<style>
-  :root {
-    --bg: #14171c;
-    --bar: #1d2128;
-    --line: #2c323c;
-    --text: #e8ebf0;
-    --muted: #8d97a6;
-    --accent: #3b82f6;
-    --gold: #f5c542;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
-  body {
-    display: flex;
-    flex-direction: column;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-  }
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 12px 16px;
-    background: var(--bar);
-    border-bottom: 1px solid var(--line);
-    flex-shrink: 0;
-  }
-  .name {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
-  .crown {
-    font-size: 22px;
-    line-height: 1;
-    filter: drop-shadow(0 0 6px rgba(245, 197, 66, 0.5));
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 2px;
-    width: 100%;
-    flex: 1;
-    min-height: 0;
-    background: var(--line);
-  }
-  .grid.focus { grid-template-columns: 1fr; grid-template-rows: 1fr; }
-  .grid.focus .pane:not(.active) { display: none; }
-  .pane {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    min-height: 0;
-    background: var(--bg);
-  }
-  .bar {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 10px;
-    background: var(--bar);
-    border-bottom: 1px solid var(--line);
-    flex-shrink: 0;
-  }
-  .title { font-size: 13px; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .btn {
-    appearance: none;
-    border: 1px solid var(--line);
-    background: transparent;
-    color: var(--text);
-    font: inherit;
-    font-size: 12px;
-    padding: 5px 9px;
-    border-radius: 6px;
-    cursor: pointer;
-    text-decoration: none;
-    white-space: nowrap;
-  }
-  .btn:hover { background: #262c35; }
-  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  iframe { flex: 1; width: 100%; border: 0; background: #fff; }
 
-  @media (max-width: 800px) {
-    html, body { height: auto; }
-    .grid { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-rows: 80vh; flex: none; }
-    .grid.focus { grid-auto-rows: 100vh; }
+<style>
+:root {
+  --bg: #14171c;
+  --bar: #1d2128;
+  --line: #2c323c;
+  --text: #e8ebf0;
+  --accent: #3b82f6;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--bar);
+  flex-shrink: 0;
+}
+
+.name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.crown {
+  font-size: 22px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  background: var(--line);
+}
+
+.grid.focus {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.grid.focus .pane:not(.active) {
+  display: none;
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: var(--bg);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  background: var(--bar);
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: bold;
+  flex: 1;
+}
+
+.btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  font-size: 12px;
+  padding: 5px 7px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+iframe {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  background: white;
+}
+
+/* Full-screen poster */
+.poster-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #050816;
+}
+
+.poster-overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.poster-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid white;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  font-size: 25px;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-auto-rows: 80vh;
+    overflow-y: auto;
   }
+}
 </style>
 </head>
+
 <body>
 
 <header class="header">
   <span class="name">Mahmoud Youssef</span>
-  <span class="crown" aria-hidden="true">👑</span>
+  <span class="crown">👑</span>
 </header>
 
 <main class="grid" id="grid"></main>
 
+<!-- Poster overlay -->
+<div class="poster-overlay" id="posterOverlay">
+  <img src="poster.png" alt="Top AI Tools - 100% FREE">
+  <button
+    class="poster-close"
+    id="closePoster"
+    aria-label="Close poster"
+    type="button"
+  >×</button>
+</div>
+
 <script>
-  // ===== LINKS =====
-  const LINKS = [
-    "https://lltrco.com/?r=mahmoudyoussef20",
-    "https://lltrco.com/?r=mahmoudyoussef2024",
-    "https://lltrco.com/?r=mmyy1",
-    "https://lltrco.com/?r=mmyy2"
-  ];
-  // =================
+const LINKS = [
+  "https://lltrco.com/?r=mahmoudyoussef20",
+  "https://lltrco.com/?r=mahmoudyoussef2024",
+  "https://lltrco.com/?r=mmyy1",
+  "https://lltrco.com/?r=mmyy2"
+];
 
-  const grid = document.getElementById('grid');
+const grid = document.getElementById("grid");
 
-  LINKS.forEach(function (url, i) {
-    const pane = document.createElement('section');
-    pane.className = 'pane';
+LINKS.forEach(function(url, i) {
+  const pane = document.createElement("section");
+  pane.className = "pane";
 
-    const bar = document.createElement('div');
-    bar.className = 'bar';
+  const bar = document.createElement("div");
+  bar.className = "bar";
 
-    const title = document.createElement('span');
-    title.className = 'title';
-    title.textContent = 'Link ' + (i + 1);
+  const title = document.createElement("span");
+  title.className = "title";
+  title.textContent = "Link " + (i + 1);
 
-    const reload = document.createElement('button');
-    reload.className = 'btn';
-    reload.textContent = 'Reload';
+  const reload = document.createElement("button");
+  reload.className = "btn";
+  reload.textContent = "Reload";
 
-    const expand = document.createElement('button');
-    expand.className = 'btn';
-    expand.textContent = 'Expand';
-    expand.setAttribute('data-exp', '1');
+  const expand = document.createElement("button");
+  expand.className = "btn";
+  expand.textContent = "Expand";
+  expand.dataset.exp = "1";
 
-    const open = document.createElement('a');
-    open.className = 'btn';
-    open.textContent = 'Open in new tab';
-    open.href = url;
-    open.target = '_blank';
-    open.rel = 'noopener';
+  const open = document.createElement("a");
+  open.className = "btn";
+  open.textContent = "Open";
+  open.href = url;
+  open.target = "_blank";
+  open.rel = "noopener";
 
-    const frame = document.createElement('iframe');
-    frame.title = 'Link ' + (i + 1);
-    frame.src = url;
-    frame.allow = 'fullscreen';
+  const frame = document.createElement("iframe");
+  frame.title = "Link " + (i + 1);
+  frame.src = url;
+  frame.allow = "fullscreen";
 
-    reload.addEventListener('click', function () { frame.src = frame.src; });
+  reload.addEventListener("click", function() {
+    frame.src = frame.src;
+  });
 
-    expand.addEventListener('click', function () {
-      const isActive = pane.classList.contains('active');
-      document.querySelectorAll('.pane').forEach(function (p) {
-        p.classList.remove('active');
-        p.querySelector('[data-exp]').textContent = 'Expand';
-      });
-      grid.classList.remove('focus');
-      if (!isActive) {
-        pane.classList.add('active');
-        grid.classList.add('focus');
-        expand.textContent = 'Collapse';
-      }
+  expand.addEventListener("click", function() {
+    const isActive = pane.classList.contains("active");
+
+    document.querySelectorAll(".pane").forEach(function(p) {
+      p.classList.remove("active");
+      const btn = p.querySelector("[data-exp]");
+      if (btn) btn.textContent = "Expand";
     });
 
-    bar.append(title, reload, expand, open);
-    pane.append(bar, frame);
-    grid.appendChild(pane);
+    grid.classList.remove("focus");
+
+    if (!isActive) {
+      pane.classList.add("active");
+      grid.classList.add("focus");
+      expand.textContent = "Collapse";
+    }
   });
+
+  bar.append(title, reload, expand, open);
+  pane.append(bar, frame);
+  grid.appendChild(pane);
+});
+
+document.getElementById("closePoster").addEventListener("click", function() {
+  document.getElementById("posterOverlay").remove();
+});
 </script>
 
 </body>
