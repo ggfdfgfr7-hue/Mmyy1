@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>محمود يوسف | Quad View</title>
+<title>Mahmoud Youssef | Quad View</title>
 
 <style>
 :root {
@@ -34,7 +34,7 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* الهيدر العلوي */
+/* Header */
 .header {
   min-height: 48px;
   display: flex;
@@ -56,7 +56,7 @@ body {
   font-size: 21px;
 }
 
-/* شبكة العرض الأرباعية */
+/* Grid layout */
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -110,7 +110,7 @@ iframe {
   background: white;
 }
 
-/* ملصق الإعلان الرئيسي */
+/* Poster Overlay */
 .poster-overlay {
   position: fixed;
   inset: 0;
@@ -130,27 +130,28 @@ iframe {
   object-position: center;
 }
 
-/* زر إغلاق الملصق لرؤية الروابط */
+/* Small and neat close button */
 .close-btn {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  background: rgba(255, 255, 255, 0.2);
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.15);
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  padding: 8px 15px;
-  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
   font-weight: bold;
   cursor: pointer;
   z-index: 10000;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(4px);
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.3);
 }
 
-/* رسالة خطأ في حال عدم وجود الصورة */
+/* Error message in English if image is missing */
 .poster-error {
   display: none;
   max-width: 420px;
@@ -164,7 +165,7 @@ iframe {
   color: var(--accent);
 }
 
-/* الشاشات الصغيرة */
+/* Small screens */
 @media (max-width: 800px) {
   .grid {
     grid-template-columns: 1fr;
@@ -186,12 +187,12 @@ iframe {
   <span class="crown" aria-hidden="true">👑</span>
 </header>
 
-<!-- الشاشات الأربع الخلفية -->
+<!-- Background grid pages -->
 <main class="grid" id="grid"></main>
 
-<!-- ملصق إعلاني مع زر إغلاق -->
+<!-- Poster Overlay with a smaller close button -->
 <div class="poster-overlay" id="posterOverlay">
-  <button class="close-btn" id="closeBtn">إغلاق ✕</button>
+  <button class="close-btn" id="closeBtn">✕</button>
 
   <img
     class="poster-image"
@@ -202,8 +203,8 @@ iframe {
 
   <div class="poster-error" id="posterError">
     <strong>Top AI Tools — 100% FREE</strong>
-    <p>لم يتم العثور على صورة الملصق.</p>
-    <p>يرجى رفع ملف الصورة باسم <b>poster.png</b> في نفس المجلد الذي يحتوي على ملف index.html.</p>
+    <p>Poster image not found.</p>
+    <p>Please make sure to upload an image named <b>poster.png</b> in the exact same folder as index.html.</p>
   </div>
 </div>
 
@@ -217,54 +218,4 @@ const LINKS = [
 
 const grid = document.getElementById("grid");
 
-LINKS.forEach(function(url, i) {
-  const pane = document.createElement("section");
-  pane.className = "pane";
-
-  const bar = document.createElement("div");
-  bar.className = "bar";
-
-  const title = document.createElement("span");
-  title.className = "title";
-  title.textContent = "الرابط " + (i + 1);
-
-  const reload = document.createElement("button");
-  reload.className = "btn";
-  reload.textContent = "إعادة تحميل";
-
-  const open = document.createElement("a");
-  open.className = "btn";
-  open.textContent = "فتح";
-  open.href = url;
-  open.target = "_blank";
-  open.rel = "noopener noreferrer";
-
-  const frame = document.createElement("iframe");
-  frame.title = "الرابط " + (i + 1);
-  frame.src = url;
-  frame.loading = "eager";
-
-  reload.addEventListener("click", function() {
-    frame.src = frame.src;
-  });
-
-  bar.append(title, reload, open);
-  pane.append(bar, frame);
-  grid.appendChild(pane);
-});
-
-/* زر إغلاق الإعلان */
-document.getElementById("closeBtn").addEventListener("click", function() {
-  document.getElementById("posterOverlay").style.display = "none";
-});
-
-/* عرض رسالة توضيحية في حال تعذر تحميل الصورة */
-document.getElementById("posterImage")
-  .addEventListener("error", function() {
-    this.style.display = "none";
-    document.getElementById("posterError").style.display = "block";
-  });
-</script>
-
-</body>
-</html>
+LINKS.forEach(function(url
