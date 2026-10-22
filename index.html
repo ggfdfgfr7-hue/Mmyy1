@@ -4,15 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quad View</title>
+<title>Mahmoud Youssef | Quad View</title>
 
 <style>
 :root {
-  --bg: #14171c;
-  --bar: #1d2128;
-  --line: #2c323c;
-  --text: #e8ebf0;
-  --accent: #3b82f6;
+  --bg: #080d1b;
+  --bar: #141b2b;
+  --line: #27334a;
+  --text: #f1f5ff;
+  --accent: #28d9ff;
 }
 
 * {
@@ -29,48 +29,43 @@ html, body {
 body {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background: var(--bg);
   color: var(--text);
   font-family: Arial, sans-serif;
 }
 
+/* Header */
 .header {
+  min-height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 12px 16px;
+  gap: 9px;
+  padding: 10px;
   background: var(--bar);
+  border-bottom: 1px solid var(--line);
   flex-shrink: 0;
 }
 
 .name {
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 19px;
+  font-weight: 700;
 }
 
 .crown {
-  font-size: 22px;
+  font-size: 21px;
 }
 
+/* Four background pages */
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  gap: 2px;
-  width: 100%;
+  gap: 3px;
   flex: 1;
   min-height: 0;
   background: var(--line);
-}
-
-.grid.focus {
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-}
-
-.grid.focus .pane:not(.active) {
-  display: none;
 }
 
 .pane {
@@ -84,27 +79,27 @@ body {
 .bar {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   padding: 6px;
   background: var(--bar);
   flex-shrink: 0;
 }
 
 .title {
-  font-size: 13px;
-  font-weight: bold;
   flex: 1;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .btn {
-  border: 1px solid var(--line);
-  background: transparent;
-  color: var(--text);
-  font-size: 12px;
   padding: 5px 7px;
-  border-radius: 6px;
-  cursor: pointer;
+  color: var(--text);
+  background: #1b263b;
+  border: 1px solid #35435c;
+  border-radius: 5px;
+  font-size: 11px;
   text-decoration: none;
+  cursor: pointer;
   white-space: nowrap;
 }
 
@@ -116,43 +111,50 @@ iframe {
   background: white;
 }
 
-/* Full-screen poster */
+/* Large professional poster */
 .poster-overlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   background: #050816;
 }
 
-.poster-overlay img {
+.poster-image {
+  display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
-  display: block;
 }
 
-.poster-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 34px;
-  height: 34px;
-  border: 1px solid white;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.7);
+/* Show a useful message if the image is missing */
+.poster-error {
+  display: none;
+  max-width: 420px;
+  padding: 28px;
+  text-align: center;
+  line-height: 1.7;
   color: white;
-  font-size: 25px;
-  cursor: pointer;
-  z-index: 10000;
 }
 
+.poster-error strong {
+  color: var(--accent);
+}
+
+/* Small screens */
 @media (max-width: 800px) {
   .grid {
     grid-template-columns: 1fr;
-    grid-template-rows: none;
-    grid-auto-rows: 80vh;
+    grid-template-rows: repeat(4, 80vh);
     overflow-y: auto;
+  }
+
+  .poster-image {
+    object-fit: contain;
   }
 }
 </style>
@@ -162,20 +164,27 @@ iframe {
 
 <header class="header">
   <span class="name">Mahmoud Youssef</span>
-  <span class="crown">👑</span>
+  <span class="crown" aria-hidden="true">👑</span>
 </header>
 
+<!-- Background pages -->
 <main class="grid" id="grid"></main>
 
-<!-- Poster overlay -->
+<!-- Large poster: no close button -->
 <div class="poster-overlay" id="posterOverlay">
-  <img src="poster.png" alt="Top AI Tools - 100% FREE">
-  <button
-    class="poster-close"
-    id="closePoster"
-    aria-label="Close poster"
-    type="button"
-  >×</button>
+  <img
+    class="poster-image"
+    id="posterImage"
+    src="./poster.png"
+    alt="Top AI Tools - 100% FREE"
+  >
+
+  <div class="poster-error" id="posterError">
+    <strong>Top AI Tools — 100% FREE</strong>
+    <p>Poster image not found.</p>
+    <p>Upload the image file named <b>poster.png</b>
+    in the same folder as index.html.</p>
+  </div>
 </div>
 
 <script>
@@ -203,53 +212,33 @@ LINKS.forEach(function(url, i) {
   reload.className = "btn";
   reload.textContent = "Reload";
 
-  const expand = document.createElement("button");
-  expand.className = "btn";
-  expand.textContent = "Expand";
-  expand.dataset.exp = "1";
-
   const open = document.createElement("a");
   open.className = "btn";
   open.textContent = "Open";
   open.href = url;
   open.target = "_blank";
-  open.rel = "noopener";
+  open.rel = "noopener noreferrer";
 
   const frame = document.createElement("iframe");
   frame.title = "Link " + (i + 1);
   frame.src = url;
-  frame.allow = "fullscreen";
+  frame.loading = "eager";
 
   reload.addEventListener("click", function() {
     frame.src = frame.src;
   });
 
-  expand.addEventListener("click", function() {
-    const isActive = pane.classList.contains("active");
-
-    document.querySelectorAll(".pane").forEach(function(p) {
-      p.classList.remove("active");
-      const btn = p.querySelector("[data-exp]");
-      if (btn) btn.textContent = "Expand";
-    });
-
-    grid.classList.remove("focus");
-
-    if (!isActive) {
-      pane.classList.add("active");
-      grid.classList.add("focus");
-      expand.textContent = "Collapse";
-    }
-  });
-
-  bar.append(title, reload, expand, open);
+  bar.append(title, reload, open);
   pane.append(bar, frame);
   grid.appendChild(pane);
 });
 
-document.getElementById("closePoster").addEventListener("click", function() {
-  document.getElementById("posterOverlay").remove();
-});
+/* Display a clear message instead of a black screen */
+document.getElementById("posterImage")
+  .addEventListener("error", function() {
+    this.style.display = "none";
+    document.getElementById("posterError").style.display = "block";
+  });
 </script>
 
 </body>
