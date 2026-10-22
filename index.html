@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mahmoud Youssef | Quad View</title>
+<title>محمود يوسف | Quad View</title>
 
 <style>
 :root {
@@ -35,7 +34,7 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* Header */
+/* الهيدر العلوي */
 .header {
   min-height: 48px;
   display: flex;
@@ -57,7 +56,7 @@ body {
   font-size: 21px;
 }
 
-/* Four background pages */
+/* شبكة العرض الأرباعية */
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -111,7 +110,7 @@ iframe {
   background: white;
 }
 
-/* Large professional poster */
+/* ملصق الإعلان الرئيسي */
 .poster-overlay {
   position: fixed;
   inset: 0;
@@ -131,7 +130,27 @@ iframe {
   object-position: center;
 }
 
-/* Show a useful message if the image is missing */
+/* زر إغلاق الملصق لرؤية الروابط */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10000;
+  backdrop-filter: blur(5px);
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* رسالة خطأ في حال عدم وجود الصورة */
 .poster-error {
   display: none;
   max-width: 420px;
@@ -145,7 +164,7 @@ iframe {
   color: var(--accent);
 }
 
-/* Small screens */
+/* الشاشات الصغيرة */
 @media (max-width: 800px) {
   .grid {
     grid-template-columns: 1fr;
@@ -167,11 +186,13 @@ iframe {
   <span class="crown" aria-hidden="true">👑</span>
 </header>
 
-<!-- Background pages -->
+<!-- الشاشات الأربع الخلفية -->
 <main class="grid" id="grid"></main>
 
-<!-- Large poster: no close button -->
+<!-- ملصق إعلاني مع زر إغلاق -->
 <div class="poster-overlay" id="posterOverlay">
+  <button class="close-btn" id="closeBtn">إغلاق ✕</button>
+
   <img
     class="poster-image"
     id="posterImage"
@@ -181,9 +202,8 @@ iframe {
 
   <div class="poster-error" id="posterError">
     <strong>Top AI Tools — 100% FREE</strong>
-    <p>Poster image not found.</p>
-    <p>Upload the image file named <b>poster.png</b>
-    in the same folder as index.html.</p>
+    <p>لم يتم العثور على صورة الملصق.</p>
+    <p>يرجى رفع ملف الصورة باسم <b>poster.png</b> في نفس المجلد الذي يحتوي على ملف index.html.</p>
   </div>
 </div>
 
@@ -206,21 +226,21 @@ LINKS.forEach(function(url, i) {
 
   const title = document.createElement("span");
   title.className = "title";
-  title.textContent = "Link " + (i + 1);
+  title.textContent = "الرابط " + (i + 1);
 
   const reload = document.createElement("button");
   reload.className = "btn";
-  reload.textContent = "Reload";
+  reload.textContent = "إعادة تحميل";
 
   const open = document.createElement("a");
   open.className = "btn";
-  open.textContent = "Open";
+  open.textContent = "فتح";
   open.href = url;
   open.target = "_blank";
   open.rel = "noopener noreferrer";
 
   const frame = document.createElement("iframe");
-  frame.title = "Link " + (i + 1);
+  frame.title = "الرابط " + (i + 1);
   frame.src = url;
   frame.loading = "eager";
 
@@ -233,7 +253,12 @@ LINKS.forEach(function(url, i) {
   grid.appendChild(pane);
 });
 
-/* Display a clear message instead of a black screen */
+/* زر إغلاق الإعلان */
+document.getElementById("closeBtn").addEventListener("click", function() {
+  document.getElementById("posterOverlay").style.display = "none";
+});
+
+/* عرض رسالة توضيحية في حال تعذر تحميل الصورة */
 document.getElementById("posterImage")
   .addEventListener("error", function() {
     this.style.display = "none";
