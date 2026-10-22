@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -56,7 +57,7 @@ body {
   font-size: 21px;
 }
 
-/* Grid layout */
+/* Four background pages */
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -110,7 +111,7 @@ iframe {
   background: white;
 }
 
-/* Poster Overlay */
+/* Large professional poster */
 .poster-overlay {
   position: fixed;
   inset: 0;
@@ -130,28 +131,7 @@ iframe {
   object-position: center;
 }
 
-/* Small and neat close button */
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 10000;
-  backdrop-filter: blur(4px);
-}
-
-.close-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* Error message in English if image is missing */
+/* Show a useful message if the image is missing */
 .poster-error {
   display: none;
   max-width: 420px;
@@ -187,13 +167,11 @@ iframe {
   <span class="crown" aria-hidden="true">👑</span>
 </header>
 
-<!-- Background grid pages -->
+<!-- Background pages -->
 <main class="grid" id="grid"></main>
 
-<!-- Poster Overlay with a smaller close button -->
+<!-- Large poster: no close button -->
 <div class="poster-overlay" id="posterOverlay">
-  <button class="close-btn" id="closeBtn">✕</button>
-
   <img
     class="poster-image"
     id="posterImage"
@@ -204,7 +182,8 @@ iframe {
   <div class="poster-error" id="posterError">
     <strong>Top AI Tools — 100% FREE</strong>
     <p>Poster image not found.</p>
-    <p>Please make sure to upload an image named <b>poster.png</b> in the exact same folder as index.html.</p>
+    <p>Upload the image file named <b>poster.png</b>
+    in the same folder as index.html.</p>
   </div>
 </div>
 
@@ -218,4 +197,49 @@ const LINKS = [
 
 const grid = document.getElementById("grid");
 
-LINKS.forEach(function(url
+LINKS.forEach(function(url, i) {
+  const pane = document.createElement("section");
+  pane.className = "pane";
+
+  const bar = document.createElement("div");
+  bar.className = "bar";
+
+  const title = document.createElement("span");
+  title.className = "title";
+  title.textContent = "Link " + (i + 1);
+
+  const reload = document.createElement("button");
+  reload.className = "btn";
+  reload.textContent = "Reload";
+
+  const open = document.createElement("a");
+  open.className = "btn";
+  open.textContent = "Open";
+  open.href = url;
+  open.target = "_blank";
+  open.rel = "noopener noreferrer";
+
+  const frame = document.createElement("iframe");
+  frame.title = "Link " + (i + 1);
+  frame.src = url;
+  frame.loading = "eager";
+
+  reload.addEventListener("click", function() {
+    frame.src = frame.src;
+  });
+
+  bar.append(title, reload, open);
+  pane.append(bar, frame);
+  grid.appendChild(pane);
+});
+
+/* Display a clear message instead of a black screen */
+document.getElementById("posterImage")
+  .addEventListener("error", function() {
+    this.style.display = "none";
+    document.getElementById("posterError").style.display = "block";
+  });
+</script>
+
+</body>
+</html>
