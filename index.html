@@ -3,116 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Quad View</title>
+<title>Mahmoud Youssef</title>
 <link rel="preconnect" href="https://lltrco.com">
 <style>
-:root{--bg:#14171c;--bar:#1d2128;--line:#2c323c;--text:#e8ebf0;--accent:#3b82f6}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:"Segoe UI",Tahoma,Arial,sans-serif}
-.header{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 16px;background:var(--bar);border-bottom:1px solid var(--line);flex-shrink:0}
-.name{font-size:20px;font-weight:700;letter-spacing:.5px}
-.crown{font-size:22px;line-height:1;filter:drop-shadow(0 0 6px rgba(245,197,66,.5))}
-.grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2px;width:100%;flex:1;min-height:0;background:var(--line)}
-.grid.focus{grid-template-columns:1fr;grid-template-rows:1fr}
-.grid.focus .pane:not(.active){display:none}
-.pane{display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--bg);contain:layout paint}
-.bar{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bar);border-bottom:1px solid var(--line);flex-shrink:0}
-.title{font-size:13px;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.btn{appearance:none;border:1px solid var(--line);background:transparent;color:var(--text);font:inherit;font-size:12px;padding:5px 9px;border-radius:6px;cursor:pointer;text-decoration:none;white-space:nowrap}
-.btn:hover{background:#262c35}
-.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+body{display:flex;flex-direction:column;background:#14171c;color:#e8ebf0;font-family:"Segoe UI",Tahoma,Arial,sans-serif}
+header{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 16px;background:#1d2128;border-bottom:1px solid #2c323c}
+header span:first-child{font-size:20px;font-weight:700}
 iframe{flex:1;width:100%;border:0;background:#fff}
-@media(max-width:800px){
-html,body{height:auto}
-.grid{grid-template-columns:1fr;grid-template-rows:none;grid-auto-rows:80vh;flex:none}
-.grid.focus{grid-auto-rows:100vh}
-}
-#articleSticker{position:fixed;inset:0;width:100vw;height:100vh;background:#0B1220;z-index:99999;display:flex;align-items:center;justify-content:center}
-#articleSticker .sticker-link{display:block;width:100%;height:100%}
-#articleSticker svg{width:100%;height:100%;object-fit:contain;display:block}
-#articleSticker .sticker-close{position:absolute;top:4px;right:6px;width:16px;height:16px;border:none;background:none;color:#fff;font-size:14px;line-height:16px;text-align:center;cursor:pointer;z-index:2;padding:0;text-shadow:0 0 3px #000,0 0 3px #000}
 </style>
 </head>
 <body>
-
-<div id="articleSticker">
-<button class="sticker-close" onclick="closeSticker()" aria-label="إغلاق">&times;</button>
-<a class="sticker-link" id="stickerLink" target="_blank" rel="noopener">
-<svg id="stickerSvg" viewBox="0 0 1200 628" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Traffic Exchange - $22 now FREE for a limited time" font-family="Segoe UI,Tahoma,Arial,sans-serif">
-<rect width="1200" height="628" fill="#0B1220"/>
-<circle cx="1080" cy="120" r="280" fill="#12304A" opacity=".9"/>
-<circle cx="850" cy="618" r="230" fill="#0F2438"/>
-<rect x="72" y="56" width="318" height="46" rx="23" fill="#FFC931"/>
-<g transform="translate(92,67)" fill="none" stroke="#0B1220" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></g>
-<text x="128" y="87" font-size="20" font-weight="800" letter-spacing=".5" fill="#0B1220">LIMITED TIME OFFER</text>
-<text x="72" y="190" font-size="68" font-weight="800" fill="#fff" textLength="640" lengthAdjust="spacingAndGlyphs">Traffic Exchange</text>
-<text x="72" y="244" font-size="28" font-weight="500" fill="#CFE3F3">Boost your site visits now and</text>
-<text x="72" y="282" font-size="28" font-weight="500" fill="#CFE3F3">reach a brand-new audience</text>
-<text x="72" y="380" font-size="52" font-weight="700" fill="#9FB4C7">$22</text>
-<path d="M62 368L160 342" stroke="#FF5A5F" stroke-width="6" stroke-linecap="round"/>
-<text x="210" y="384" font-size="88" font-weight="800" fill="#19E3AE">FREE!</text>
-<rect x="72" y="440" width="340" height="68" rx="14" fill="#19E3AE"/>
-<text x="104" y="484" font-size="26" font-weight="800" fill="#0B1220">Start Free Now</text>
-<path d="M362 474h28M382 464l10 10-10 10" fill="none" stroke="#0B1220" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="72" y="596" font-size="18" font-weight="500" fill="#9FB4C7">lltrco.com</text>
-<g transform="translate(748,84)">
-<rect x="20" y="40" width="340" height="250" rx="22" fill="#16293F" stroke="#2C4A68" stroke-width="3"/>
-<rect x="20" y="40" width="340" height="44" rx="22" fill="#1F3A57"/>
-<circle cx="52" cy="62" r="7" fill="#FF5A5F"/><circle cx="76" cy="62" r="7" fill="#FFC931"/><circle cx="100" cy="62" r="7" fill="#19E3AE"/>
-<rect x="60" y="210" width="40" height="55" rx="6" fill="#2C4A68"/>
-<rect x="120" y="180" width="40" height="85" rx="6" fill="#3A6A94"/>
-<rect x="180" y="150" width="40" height="115" rx="6" fill="#19E3AE"/>
-<rect x="240" y="115" width="40" height="150" rx="6" fill="#FFC931"/>
-<path d="M70 190L140 150L200 125L300 96M286 86L304 94L292 110" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="95" cy="372" r="58" fill="#FFC931"/><circle cx="285" cy="372" r="58" fill="#19E3AE"/>
-<path d="M150 352H225M205 332L228 352L205 372M230 392H155M175 372L152 392L175 412" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="95" cy="372" r="22" fill="#0B1220"/><circle cx="285" cy="372" r="22" fill="#0B1220"/>
-</g>
-</svg>
-</a>
-</div>
-
-<header class="header">
-<span class="name">Mahmoud Youssef</span>
-<span class="crown" aria-hidden="true">👑</span>
-</header>
-
-<main class="grid" id="grid"></main>
-
-<script>
-var LINKS=[
-"https://lltrco.com/?r=mahmoudyoussef20",
-"https://lltrco.com/?r=mahmoudyoussef2024",
-"https://lltrco.com/?r=mmyy1",
-"https://lltrco.com/?r=mmyy2"
-];
-var grid=document.getElementById('grid'),panes=[];
-LINKS.forEach(function(url,i){
-var pane=document.createElement('section');pane.className='pane';
-var bar=document.createElement('div');bar.className='bar';
-var title=document.createElement('span');title.className='title';title.textContent='Link '+(i+1);
-var reload=document.createElement('button');reload.className='btn';reload.textContent='Reload';
-var expand=document.createElement('button');expand.className='btn';expand.textContent='Expand';
-var open=document.createElement('a');open.className='btn';open.textContent='Open in new tab';open.href=url;open.target='_blank';open.rel='noopener';
-var frame=document.createElement('iframe');frame.title='Link '+(i+1);frame.src=url;frame.allow='fullscreen';
-reload.addEventListener('click',function(){frame.src=frame.src});
-expand.addEventListener('click',function(){
-var was=pane.classList.contains('active');
-panes.forEach(function(p){p.pane.classList.remove('active');p.expand.textContent='Expand'});
-grid.classList.remove('focus');
-if(!was){pane.classList.add('active');grid.classList.add('focus');expand.textContent='Collapse'}
-});
-bar.append(title,reload,expand,open);
-pane.append(bar,frame);
-panes.push({pane:pane,expand:expand});
-grid.appendChild(pane);
-});
-var ARTICLE_URL="";
-var sl=document.getElementById('stickerLink');
-if(ARTICLE_URL){sl.href=ARTICLE_URL}else{sl.style.cursor='default'}
-function closeSticker(){document.getElementById('articleSticker').style.display='none'}
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSticker()});
-</script>
+<header><span>Mahmoud Youssef</span><span aria-hidden="true">👑</span></header>
+<iframe title="Mahmoud Youssef" src="https://lltrco.com/?r=mahmoudyoussef20" allow="fullscreen"></iframe>
 </body>
 </html>
