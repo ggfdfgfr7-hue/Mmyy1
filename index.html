@@ -13,7 +13,7 @@ body{display:flex;flex-direction:column;background:var(--bg);color:var(--text);f
 .header{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 16px;background:var(--bar);border-bottom:1px solid var(--line);flex-shrink:0}
 .name{font-size:20px;font-weight:700;letter-spacing:.5px}
 .crown{font-size:22px;line-height:1;filter:drop-shadow(0 0 6px rgba(245,197,66,.5))}
-.grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr;gap:2px;width:100%;flex:1;min-height:0;background:var(--line)}
+.grid{display:grid;grid-template-columns:1fr;grid-template-rows:1fr;gap:2px;width:100%;flex:1;min-height:0;background:var(--line)}
 .grid.focus{grid-template-columns:1fr;grid-template-rows:1fr}
 .grid.focus .pane:not(.active){display:none}
 .pane{display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--bg);contain:layout paint}
@@ -70,8 +70,7 @@ iframe{flex:1;width:100%;border:0;background:#fff}
 
 <script>
 var LINKS=[
-"https://lltrco.com/?r=mahmoudyoussef20",
-"https://lltrco.com/?r=mahmoudyoussef2024"
+"https://lltrco.com/?r=mahmoudyoussef20"
 ];
 var grid=document.getElementById('grid'),panes=[];
 LINKS.forEach(function(url,i){
