@@ -3,98 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Quad View</title>
+<title>Two Ads. One Screen. | Mahmoud Youssef</title>
+<meta name="description" content="Run two traffic exchange links side by side in a single view.">
 <link rel="preconnect" href="https://lltrco.com">
+<link rel="dns-prefetch" href="https://www.websyndic.com">
 <style>
-:root{--bg:#14171c;--bar:#1d2128;--line:#2c323c;--text:#e8ebf0;--accent:#3b82f6}
+:root{--bg:#0f1318;--bar:#171c23;--line:#272e38;--text:#e8ebf0;--muted:#a3adba;--accent:#3b82f6;--gold:#f5c542}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{display:flex;flex-direction:column;background:var(--bg);color:var(--text);font-family:"Segoe UI",Tahoma,Arial,sans-serif}
-.header{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 16px;background:var(--bar);border-bottom:1px solid var(--line);flex-shrink:0}
-.name{font-size:20px;font-weight:700;letter-spacing:.5px}
-.crown{font-size:22px;line-height:1;filter:drop-shadow(0 0 6px rgba(245,197,66,.5))}
-.grid{display:grid;grid-template-columns:1fr;grid-template-rows:1fr;gap:2px;width:100%;flex:1;min-height:0;background:var(--line)}
-.grid.focus{grid-template-columns:1fr;grid-template-rows:1fr}
-.grid.focus .pane:not(.active){display:none}
-.pane{display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--bg);contain:layout paint}
-.bar{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bar);border-bottom:1px solid var(--line);flex-shrink:0}
-.title{font-size:13px;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.btn{appearance:none;border:1px solid var(--line);background:transparent;color:var(--text);font:inherit;font-size:12px;padding:5px 9px;border-radius:6px;cursor:pointer;text-decoration:none;white-space:nowrap}
-.btn:hover{background:#262c35}
-.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-iframe{flex:1;width:100%;border:0;background:#fff}
-.foot{display:flex;justify-content:center;padding:4px;background:var(--bar);border-top:1px solid var(--line);flex-shrink:0}
-.foot img{display:block;max-width:100%;height:auto}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 20px;background:var(--bar);border-bottom:1px solid var(--line);flex-shrink:0}
+.brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;white-space:nowrap}
+.crown{font-size:18px;line-height:1}
+.mail{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;color:var(--text);text-decoration:none;font-size:12.5px;white-space:nowrap;transition:background .15s,border-color .15s}
+.mail:hover{background:#1f2630;border-color:var(--accent)}
+.mail:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.intro{padding:14px 20px 12px;text-align:center;background:var(--bar);border-bottom:1px solid var(--line);flex-shrink:0}
+.intro h1{font-size:24px;font-weight:800;letter-spacing:.3px}
+.intro h1 span{color:var(--gold)}
+.intro p{max-width:900px;margin:6px auto 0;font-size:13.5px;line-height:1.55;color:var(--muted)}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;flex:1;min-height:0;background:var(--line)}
+.pane{min-width:0;min-height:0;background:#fff}
+iframe{display:block;width:100%;height:100%;border:0;background:#fff}
+
+.foot{display:flex;align-items:center;justify-content:center;padding:5px 10px;background:var(--bar);border-top:1px solid var(--line);flex-shrink:0}
+.foot img{display:block;max-width:100%;max-height:60px;width:auto;height:auto}
+
 @media(max-width:800px){
-.title{display:none}
-.bar{flex-wrap:wrap;gap:4px;padding:4px}
-.btn{padding:4px 6px;font-size:11px}
+.topbar{padding:6px 10px}
+.mail{font-size:11px;padding:5px 8px}
+.intro{padding:8px 12px}
+.intro h1{font-size:18px}
+.intro p{font-size:11.5px;line-height:1.45;margin-top:4px}
 }
-#sticker{position:fixed;inset:0;z-index:99999;background:#0B1220;display:flex;align-items:center;justify-content:center}
-#sticker .box{position:relative;width:min(100vw,150vh);aspect-ratio:3/2}
-#sticker svg{width:100%;height:100%;display:block}
-#sticker button{position:absolute;top:6px;right:8px;width:20px;height:20px;border:0;border-radius:50%;background:none;color:#000;font-size:14px;line-height:20px;padding:0;cursor:pointer}
 </style>
 </head>
 <body>
 
-<div id="sticker">
-<button onclick="closeSticker()" aria-label="Close">&times;</button>
-<div class="box"><svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Earn money with smart tools for traffic exchange" font-family="Segoe UI,Tahoma,Arial,sans-serif" text-anchor="middle">
-<defs><radialGradient id="b" cx=".5" cy=".4" r=".8"><stop offset="0" stop-color="#14406B"/><stop offset="1" stop-color="#0B1220"/></radialGradient></defs>
-<rect width="1200" height="800" fill="url(#b)"/>
-<g fill="#19E3AE" opacity=".13"><circle cx="120" cy="700" r="46"><animate attributeName="cy" values="860;-60" dur="13s" repeatCount="indefinite"/></circle><circle cx="420" cy="700" r="28"><animate attributeName="cy" values="860;-60" dur="9s" repeatCount="indefinite"/></circle><circle cx="780" cy="700" r="38"><animate attributeName="cy" values="860;-60" dur="11s" repeatCount="indefinite"/></circle><circle cx="1090" cy="700" r="52"><animate attributeName="cy" values="860;-60" dur="15s" repeatCount="indefinite"/></circle></g>
-<g fill="#FFC931" opacity=".4" font-size="44" font-weight="800"><text x="250" y="800">$<animate attributeName="y" values="860;-60" dur="10s" repeatCount="indefinite"/></text><text x="640" y="800">$<animate attributeName="y" values="860;-60" dur="8s" repeatCount="indefinite"/></text><text x="950" y="800">$<animate attributeName="y" values="860;-60" dur="12s" repeatCount="indefinite"/></text></g>
-<text x="600" y="190" font-size="110" font-weight="900" fill="#FFC931">EARN MONEY</text>
-<text x="600" y="260" font-size="40" font-weight="700" fill="#4FC3F7">WITH SMART TOOLS FOR</text>
-<rect x="260" y="290" width="680" height="90" rx="45" fill="#19E3AE"><animate attributeName="opacity" values="1;.7;1" dur="2s" repeatCount="indefinite"/></rect>
-<text x="600" y="355" font-size="56" font-weight="900" fill="#0B1220">TRAFFIC EXCHANGE</text>
-<a href="https://www.leadsleap.com" target="_blank" rel="noopener"><rect x="80" y="450" width="500" height="150" rx="20" fill="#12294A" stroke="#3B9BFF" stroke-width="3"><animate attributeName="stroke-width" values="3;8;3" dur="2s" repeatCount="indefinite"/></rect><text x="330" y="535" font-size="52" font-weight="800" fill="#fff">LeadsLeap</text><text x="330" y="575" font-size="22" fill="#9FD0F5">leadsleap.com</text></a>
-<text x="600" y="540" font-size="44" font-weight="900" fill="#19E3AE">+</text>
-<a href="https://9hits.com" target="_blank" rel="noopener"><rect x="620" y="450" width="500" height="150" rx="20" fill="#231A4D" stroke="#7C5CFF" stroke-width="3"><animate attributeName="stroke-width" values="3;8;3" dur="2s" repeatCount="indefinite"/></rect><text x="870" y="535" font-size="52" font-weight="800" fill="#fff">9Hits</text><text x="870" y="575" font-size="22" fill="#B9A8FF">9hits.com</text></a>
-<text x="600" y="646" font-size="30" font-weight="800" fill="#FFC931">Grow Your Traffic. Grow Your Opportunities.</text>
-<g font-size="20" fill="#CFE3F3"><text x="600" y="688">Join a trusted community of members who exchange real visits, share exposure,</text><text x="600" y="717">and build their online presence together. Sign up free, add your site,</text><text x="600" y="746">and start earning credits and rewards through daily activity.</text><text x="600" y="775" font-weight="700" fill="#4FC3F7">The more you take part, the more your site gets seen.</text></g>
-</svg></div>
+<div class="topbar">
+<div class="brand"><span>Mahmoud Youssef</span><span class="crown" aria-hidden="true">👑</span></div>
+<a class="mail" href="mailto:mahmoudyoussef.gadalrab@gmail.com">✉ mahmoudyoussef.gadalrab@gmail.com</a>
 </div>
 
-<header class="header">
-<span class="name">Mahmoud Youssef</span>
-<span class="crown" aria-hidden="true">👑</span>
+<header class="intro">
+<h1>Two Ads. <span>One Screen.</span></h1>
+<p>This page runs two traffic exchange links side by side in a single view. Both panels load live and stay active at the same time, so your exposure is doubled without any extra effort. Simply keep this page open and let the exchange work for you.</p>
 </header>
 
-<main class="grid" id="grid"></main>
+<main class="grid">
+<section class="pane"><iframe src="https://lltrco.com/?r=mahmoudyoussef20" title="Ad 1" allow="fullscreen"></iframe></section>
+<section class="pane"><iframe src="https://lltrco.com/?r=mahmoudyoussef2024" title="Ad 2" allow="fullscreen"></iframe></section>
+</main>
 
 <footer class="foot">
-<a title="Autosurf Websyndic" href="https://www.websyndic.com/?ref=1098970" alt="Autosurf Websyndic"><img src="http://www.websyndic.com/banners/autosurf.png" alt="Autosurf Websyndic" border="0"></a>
+<a title="Autosurf Websyndic" href="https://www.websyndic.com/?ref=1098970" alt="Autosurf Websyndic"><img src="https://www.websyndic.com/banners/autosurf.png" onerror="this.onerror=null;this.src='http://www.websyndic.com/banners/autosurf.png'" alt="Autosurf Websyndic" border="0"></a>
 </footer>
 
-<script>
-var LINKS=[
-"https://lltrco.com/?r=mahmoudyoussef20"
-];
-var grid=document.getElementById('grid'),panes=[];
-LINKS.forEach(function(url,i){
-var pane=document.createElement('section');pane.className='pane';
-var bar=document.createElement('div');bar.className='bar';
-var title=document.createElement('span');title.className='title';title.textContent='Link '+(i+1);
-var reload=document.createElement('button');reload.className='btn';reload.textContent='Reload';
-var expand=document.createElement('button');expand.className='btn';expand.textContent='Expand';
-var open=document.createElement('a');open.className='btn';open.textContent='Open in new tab';open.href=url;open.target='_blank';open.rel='noopener';
-var frame=document.createElement('iframe');frame.title='Link '+(i+1);frame.src=url;frame.allow='fullscreen';frame.loading='lazy';
-reload.addEventListener('click',function(){frame.src=frame.src});
-expand.addEventListener('click',function(){
-var was=pane.classList.contains('active');
-panes.forEach(function(p){p.pane.classList.remove('active');p.expand.textContent='Expand'});
-grid.classList.remove('focus');
-if(!was){pane.classList.add('active');grid.classList.add('focus');expand.textContent='Collapse'}
-});
-bar.append(title,reload,expand,open);
-pane.append(bar,frame);
-panes.push({pane:pane,expand:expand});
-grid.appendChild(pane);
-});
-function closeSticker(){document.getElementById('sticker').remove()}
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSticker()});
-</script>
 </body>
 </html>
